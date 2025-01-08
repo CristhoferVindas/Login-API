@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ValidationError
 from .models import User
 from rest_framework.permissions import IsAuthenticated
+from tokenize import TokenError
 
 class CreateUserView(APIView):
     throttle_classes = [UserRateThrottle]
@@ -67,4 +68,12 @@ class LogoutView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=200)
 

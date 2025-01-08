@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.exceptions import ValidationError
 from .models import User
+from rest_framework.permissions import IsAuthenticated
 
 class CreateUserView(APIView):
     throttle_classes = [UserRateThrottle]
@@ -47,3 +48,23 @@ class TokenView(APIView):
                 return Response({"error": "Invalid credentials"}, status=400)
         except User.DoesNotExist:
             return Response({"error": "Invalid credentials"}, status=400)
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh")
+            if not refresh_token:
+                return Response({"error": "Refresh token is required"}, status=400)
+
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Logged out successfully"}, status=200)
+
+        except TokenError:
+            return Response({"error": "Invalid or expired token"}, status=400)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+

@@ -9,3 +9,5 @@ urlpatterns = [
     path('change-password/', ChangePasswordView.as_view(), name='register'),
     path('refresh/', RefreshTokenView.as_view(), name='register'),
 ]
+handler404 = 'users.views.custom_error_404'
+handler500 = 'users.views.custom_error_500'

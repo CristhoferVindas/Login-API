@@ -9,6 +9,7 @@ from .models import User
 from rest_framework.permissions import IsAuthenticated
 from tokenize import TokenError
 from rest_framework_simplejwt.views import TokenRefreshView
+from django.http import JsonResponse
 
 class CreateUserView(APIView):
     throttle_classes = [UserRateThrottle]
@@ -101,3 +102,9 @@ class ChangePasswordView(APIView):
 class RefreshTokenView(TokenRefreshView):
     throttle_classes = [UserRateThrottle]
 
+
+def custom_error_404(request, exception):
+    return JsonResponse({"error": "The endpoint was not found"}, status=404)
+
+def custom_error_500(request):
+    return JsonResponse({"error": "Internal server error"}, status=500)

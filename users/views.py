@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from .models import User
 from rest_framework.permissions import IsAuthenticated
 from tokenize import TokenError
+from rest_framework_simplejwt.views import TokenRefreshView
 
 class CreateUserView(APIView):
     throttle_classes = [UserRateThrottle]
@@ -96,3 +97,7 @@ class ChangePasswordView(APIView):
             return Response({"message": "Password changed successfully"}, status=200)
         except ValidationError as e:
             return Response({"error": e.messages}, status=400)
+
+class RefreshTokenView(TokenRefreshView):
+    throttle_classes = [UserRateThrottle]
+

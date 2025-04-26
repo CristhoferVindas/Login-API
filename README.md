@@ -23,7 +23,7 @@ This project is a RESTful API built with Django and Django Rest Framework for us
 
     ```bash
     git clone https://github.com/your-username/django-jwt-project.git
-    cd django-jwt-project
+    cd Login-API
     ```
 
 2. **Install dependencies**:
